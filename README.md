@@ -45,11 +45,17 @@ var myMap = new tsMap([
     ['key','value']
 ])
 
-//Alternatively you can import JSON using the helper function:
+
+//Also includes two functions that aren't in the spec:
+
+//You can import JSON using the helper function:
 var myMap = new tsMap().fromJSON({
     foo:'bar',
     key:'value'
 });
+
+//And export it using a very similar function:
+var myJSON = myMap.toJSON();
 
 ```
 
