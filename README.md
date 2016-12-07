@@ -38,7 +38,6 @@ console.log(myMap.get('foo')) //<= "bar"
 //Typescript
 var myMap = new tsMap<String,Number>();
 myMap.set('foo',2);
-....
 
 //ES6 Maps take an array of arrays as the optional init object:
 var myMap = new tsMap([
@@ -54,7 +53,7 @@ var myMap = new tsMap().fromJSON({
 
 ```
 
-Everything is documented and the definitions file is pretty clear.  If you need a full doc on using Maps look elsewhere.
+Everything is documented in the src/inded.ts file and the definitions file is pretty clear.  If you need a full doc on using Maps look elsewhere.
 
 # Building
 `npm install && npm run build`
