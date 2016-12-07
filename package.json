@@ -1,0 +1,28 @@
+{
+  "name": "typescript-map",
+  "version": "1.0.0",
+  "description": "ES6 Map Like Implemented in typescript",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "bash build.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ClickSimply/typescript-map.git"
+  },
+  "typescript": {
+    "definition": "index.d.ts"
+  },
+  "keywords": [],
+  "author": "Scott Lott, ClickSimply.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ClickSimply/typescript-map/issues"
+  },
+  "homepage": "https://github.com/ClickSimply/typescript-map#readme",
+  "devDependencies": {
+    "typescript": "^2.0.10",
+    "uglifyjs": "^2.4.10",
+    "webpack": "^1.13.3"
+  }
+}
