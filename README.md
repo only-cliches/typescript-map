@@ -7,7 +7,7 @@ I just needed a way to declare maps in my code in a safe, reusable way without t
 Just over 1kb gzipped. :)
 
 # Installation
-npm install https://github.com/ClickSimply/typescript-map
+`npm install https://github.com/ClickSimply/typescript-map`
 
 The lib creates a single global variable: `tsMap`
 
@@ -22,7 +22,9 @@ var map = require("typescript-map");
 ```
 
 If you're just using it in the browser:
+
 1. Download `dist/index.min.js`
+
 2. Include it in your head: `<script src="index.min.js"></script>`.  You may want to rename the file before dropping into your project.
 
 # Usage
