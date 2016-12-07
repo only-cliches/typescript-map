@@ -4,7 +4,7 @@ ES6 Map implemented in Typescript.
 This is not an ES6 Map polyfill, it is not a pure implementation (but it's really close!).
 I just needed a way to declare maps in my ts code in a safe, reusable way without taking dozens of kilobytes.
 
-Just under 800 bytes gzipped. :)
+Just over 700 bytes gzipped. :)
 
 # Installation
 `npm install https://github.com/ClickSimply/typescript-map`
@@ -46,16 +46,26 @@ var myMap = new tsMap([
 ])
 
 
-//Also includes two functions that aren't in the spec:
+//Also includes several functions that aren't in the spec:
 
-//You can import JSON using the helper function:
+//Import JSON into the map
 var myMap = new tsMap().fromJSON({
     foo:'bar',
     key:'value'
 });
 
-//And export it using a very similar function:
+//Export the map to JSON
 var myJSON = myMap.toJSON();
+
+//Map the map (insert meme here).  Returns an array, not the map.
+var anArray = myMap.map(function(value, key) {
+    return value + " oh look, another hippy".
+});
+
+//Filter the map (removes items in the current map)
+myMap.filter(function(value, key) {
+    return key%2; //Remove all even objects;
+});
 
 ```
 

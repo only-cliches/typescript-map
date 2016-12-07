@@ -53,7 +53,7 @@ export class tsMap<K,V> {
      * @memberOf tsMap
      */
     public fromJSON(jsonObject:any) {
-        for (var property in jsonObject) {  
+        for (let property in jsonObject) {  
             if (jsonObject.hasOwnProperty(property)) {
                 this.set(<any> property, jsonObject[property]);
             }
@@ -113,11 +113,11 @@ export class tsMap<K,V> {
      * Check to see if an item in the map exists given it's key.
      * 
      * @param {K} key
-     * @returns {boolean}
+     * @returns {Boolean}
      * 
      * @memberOf tsMap
      */
-    public has(key:K):boolean {
+    public has(key:K):Boolean {
         return this._keys.indexOf(key) > -1;
     }
 
@@ -146,7 +146,7 @@ export class tsMap<K,V> {
     public set(key:K, value:V):void {
         let t = this;
         // check if key exists and overwrite
-        var i = this._keys.indexOf(i);
+        let i = this._keys.indexOf(key);
         if (i > -1) {
             t._items[i][1] = value;
             t._values[i] = value;
@@ -175,25 +175,27 @@ export class tsMap<K,V> {
      * @memberOf tsMap
      */
     public clear():void {
-         this._keys.length = this._values.length = this._items.length = 0;
-         this.length = this.size();
+        let t = this;
+        t._keys.length = t._values.length = t._items.length = 0;
+        t.length = t.size();
     }
 
     /**
      * Delete an item from the map given it's key
      * 
      * @param {K} key
-     * @returns {boolean}
+     * @returns {Boolean}
      * 
      * @memberOf tsMap
      */
-    public delete(key:K):boolean {
-        let i = this._keys.indexOf(key);
+    public delete(key:K):Boolean {
+        let t = this;
+        let i = t._keys.indexOf(key);
         if (i > -1) {
-            this._keys.splice(i, 1);
-            this._values.splice(i, 1);
-            this._items.splice(i, 1);
-            this.length = this.size();
+            t._keys.splice(i, 1);
+            t._values.splice(i, 1);
+            t._items.splice(i, 1);
+            t.length = t.size();
             return true;
         }
         return false;
@@ -208,7 +210,7 @@ export class tsMap<K,V> {
      */
     public forEach(callbackfn:(value:V,key?:K) => void):void {
         let t = this;
-        this._keys.forEach((v) => {
+        t._keys.forEach((v) => {
             callbackfn(t.get(v),v);
         });
     }
@@ -226,6 +228,22 @@ export class tsMap<K,V> {
         return this._keys.map((itemKey) =>{
             return callbackfn(t.get(itemKey),itemKey);
         });
+    }
+
+    /**
+     * Removes items based on a conditional function passed to filter
+     * 
+     * @param {(value:V,key?:K) => Boolean} callbackfn
+     * @returns {tsMap<K,V>}
+     * 
+     * @memberOf tsMap
+     */
+    public filter(callbackfn:(value:V,key?:K) => Boolean):tsMap<K,V> {
+        let t = this;
+        t._keys.forEach((v) => {
+            if(callbackfn(t.get(v),v) == false) t.delete(v); 
+        });
+        return this;
     }
 
     /**
