@@ -1,3 +1,9 @@
+/*!
+ * Typescript-Map
+ * Copyright(c) 2016 Scott Lott
+ * Original code pulled from https://github.com/eriwen/es6-map-shim/
+ * MIT Licensed
+ */
 export declare class tsMap<K, V> {
     constructor(inputMap?: Array<Array<K | V>>);
     fromJSON(jsonObject: any): void;
