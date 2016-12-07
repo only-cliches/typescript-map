@@ -1,98 +1,43 @@
-//Original code pulled from https://github.com/eriwen/es6-map-shim/
-
-// Object.is polyfill, courtesy of @WebReflection
-var is = Object['is'] || function(a, b) {
-    return a === b ?
-        a !== 0 || 1 / a == 1 / b :
-        a != a && b != b;
-};
-
-// More reliable indexOf, courtesy of @WebReflection
-var betterIndexOf = function(value) {
-    if(value != value || value === 0) {
-        for(var i = this.length; i-- && !is(this[i], value););
-    } else {
-        i = [].indexOf.call(this, value);
-    }
-    return i;
-};
-
-
-/**
- * MapIterator used for iterating over all entries in given map.
- *
- * @param map {Map} to iterate
- * @param kind {String} identifying what to yield. Possible values
- *      are 'keys', 'values' and 'keys+values'
- * @constructor
- */
-var MapIterator = function(map, kind) {
-    var _index = 0;
-
-    return Object.create({}, {
-        next: {
-            value: function() {
-                // check if index is within bounds
-                if (_index < map.items().length) {
-                    switch(kind) {
-                        case 'keys': return map.keys()[_index++];
-                        case 'values': return map.values()[_index++];
-                        case 'keys+values': return [].slice.call(map.items()[_index++]);
-                        default: throw new TypeError('Invalid iterator type');
-                    }
-                }
-                // TODO: make sure I'm interpreting the spec correctly here
-                throw new Error('Stop Iteration');
-            }
-        },
-        iterator: {
-            value: function() {
-                return this;
-            }
-        },
-        toString: {
-            value: function() {
-                return '[object Map Iterator]';
-            }
-        }
-    });
-};
-
 export class tsMap<K,V> {
+
+    public length:Number;
 
     /**
      * Used to hold any array of the map items.
      * 
      * @internal
-     * @type {(Array<K|V>[])}
+     * @type {(Array<Array<K|V>>)}
      * @memberOf tsMap
      */
-    private _items:Array<K|V>[];
+    private _items:Array<Array<K|V>>;
 
     /**
      * Used to hold an array of keys in the map
      * 
      * @internal
-     * @type {K[]}
+     * @type {Array<K>}
      * @memberOf tsMap
      */
-    private _keys:K[];
+    private _keys:Array<K>;
 
     /**
      * Used to hold an array of values in the map
      * 
      * @internal
-     * @type {V[]}
+     * @type {Array<V>}
      * @memberOf tsMap
      */
-    private _values:V[];
+    private _values:Array<V>;
 
     constructor(inputMap?:Array<Array<K|V>>) {
-        this._items = [];
-        this._keys = [];
-        this._values = [];
-
         let t = this;
+
+        t._items = [];
+        t._keys = [];
+        t._values = [];
+        t.length = 0;
+
+        
         if(inputMap) {
             inputMap.forEach((k,v) => {
                 t.set(v[0],v[1]);
@@ -125,7 +70,7 @@ export class tsMap<K,V> {
     public toJSON():any {
         let obj = {};
         let t = this;
-        this.keys().forEach((k) => {
+        t.keys().forEach((k) => {
             obj[String(k)] = t.get(k);
         });
         return obj;
@@ -134,33 +79,33 @@ export class tsMap<K,V> {
     /**
      * Get an array of arrays respresenting the map, kind of like an export function.
      * 
-     * @returns {(Array<K|V>[])}
+     * @returns {(Array<Array<K|V>>)}
      * 
      * @memberOf tsMap
      */
-    public items():Array<K|V>[] {
+    public entries():Array<Array<K|V>> {
         return [].slice.call(this._items);
     }
 
     /**
      * Get an array of keys in the map.
      * 
-     * @returns {K[]}
+     * @returns {Array<K>}
      * 
      * @memberOf tsMap
      */
-    public keys():K[] {
+    public keys():Array<K> {
         return [].slice.call(this._keys);
     }
 
     /**
      * Get an array of the values in the map.
      * 
-     * @returns {V[]}
+     * @returns {Array<V>}
      * 
      * @memberOf tsMap
      */
-    public values():V[] {
+    public values():Array<V> {
         return [].slice.call(this._values);
     }
 
@@ -173,8 +118,7 @@ export class tsMap<K,V> {
      * @memberOf tsMap
      */
     public has(key:K):boolean {
-        var index = betterIndexOf.call(this._keys, key);
-        return index > -1;
+        return this._keys.indexOf(key) > -1;
     }
 
     /**
@@ -186,8 +130,8 @@ export class tsMap<K,V> {
      * @memberOf tsMap
      */
     public get(key:K):V {
-        var index = betterIndexOf.call(this._keys, key);
-        return index > -1 ? this._values[index] : undefined;        
+        let i = this._keys.indexOf(key);
+        return i > -1 ? this._values[i] : undefined;        
     }
 
     /**
@@ -202,15 +146,16 @@ export class tsMap<K,V> {
     public set(key:K, value:V):void {
         let t = this;
         // check if key exists and overwrite
-        var index = betterIndexOf.call(t._keys, key);
-        if (index > -1) {
-            t._items[index][1] = value;
-            t._values[index] = value;
+        var i = this._keys.indexOf(i);
+        if (i > -1) {
+            t._items[i][1] = value;
+            t._values[i] = value;
         } else {
             t._items.push([key, value]);
             t._keys.push(key);
             t._values.push(value);
         }
+        t.length = t.size();
     }
 
     /**
@@ -231,6 +176,7 @@ export class tsMap<K,V> {
      */
     public clear():void {
          this._keys.length = this._values.length = this._items.length = 0;
+         this.length = this.size();
     }
 
     /**
@@ -242,11 +188,12 @@ export class tsMap<K,V> {
      * @memberOf tsMap
      */
     public delete(key:K):boolean {
-        var index = betterIndexOf.call(this._keys, key);
-        if (index > -1) {
-            this._keys.splice(index, 1);
-            this._values.splice(index, 1);
-            this._items.splice(index, 1);
+        let i = this._keys.indexOf(key);
+        if (i > -1) {
+            this._keys.splice(i, 1);
+            this._values.splice(i, 1);
+            this._items.splice(i, 1);
+            this.length = this.size();
             return true;
         }
         return false;
@@ -259,37 +206,37 @@ export class tsMap<K,V> {
      * 
      * @memberOf tsMap
      */
-    public forEach(callbackfn:(value:V,key?:K,map?:tsMap<K,V>) => void):void {
-        if (typeof callbackfn != 'function') {
-            throw new TypeError('Invalid callback function given to forEach');
-        }
-
-        function tryNext() {
-            try {
-                return iter.next();
-            } catch(e) {
-                return undefined;
-            }
-        }
-
-        var iter = this.iterator();
-        var current = tryNext();
-        var next = tryNext();
-        while(current !== undefined) {
-            callbackfn.apply(arguments[1], [current[1], current[0], this]);
-            current = next;
-            next = tryNext();
-        }
+    public forEach(callbackfn:(value:V,key?:K) => void):void {
+        let t = this;
+        this._keys.forEach((v) => {
+            callbackfn(t.get(v),v);
+        });
     }
 
     /**
-     * Used internally in the forEach function
-     * @internal
+     * Returns an array containing the returned value of each item in the map.
+     * 
+     * @param {(value:V,key?:K) => void} callbackfn
      * @returns {*}
      * 
      * @memberOf tsMap
      */
-    public iterator():any {
-        return MapIterator(this, 'keys+values');
+    public map(callbackfn:(value:V,key?:K) => any):Array<any> {
+        let t = this;
+        return this._keys.map((itemKey) =>{
+            return callbackfn(t.get(itemKey),itemKey);
+        });
+    }
+
+    /**
+     * Creates a deep copy of the map, breaking all references to the old map and it's children.
+     * Uses JSON.parse so any functions will be stringified and lose their original purpose.
+     * 
+     * @returns {tsMap<K,V>}
+     * 
+     * @memberOf tsMap
+     */
+    public clone():tsMap<K,V> {
+        return new tsMap<K,V>(<any> JSON.parse(JSON.stringify(this._items)));
     }
 }

@@ -1,10 +1,10 @@
 # typescript-map
 ES6 Map implemented in Typescript.
 
-This is not an ES6 Map polyfill, it is not a pure implementation (but it's close!).
-I just needed a way to declare maps in my code in a safe, reusable way without taking dozens of kilobytes.
+This is not an ES6 Map polyfill, it is not a pure implementation (but it's really close!).
+I just needed a way to declare maps in my ts code in a safe, reusable way without taking dozens of kilobytes.
 
-Just over 1kb gzipped. :)
+Just under 800 bytes gzipped. :)
 
 # Installation
 `npm install https://github.com/ClickSimply/typescript-map`
@@ -53,7 +53,8 @@ var myMap = new tsMap().fromJSON({
 
 ```
 
-Everything is documented in the src/inded.ts file and the definitions file is pretty clear.  If you need a full doc on using Maps look elsewhere.
+Everything is documented in the src/index.ts file and the definitions file is pretty clear.  If you need a full doc on using Maps look here:
+[MDN Map Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 
 # Building
 `npm install && npm run build`
