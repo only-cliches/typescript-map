@@ -2,7 +2,7 @@
   "name": "typescript-map",
   "version": "1.0.1",
   "description": "ES6 Map Like Implemented in typescript",
-  "main": "dist/tsmap.min.js",
+  "main": "index.js",
   "scripts": {
     "build": "bash build.sh"
   },
