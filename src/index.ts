@@ -37,9 +37,8 @@ export class tsMap<K,V> {
         t._values = [];
         t.length = 0;
 
-        
         if(inputMap) {
-            inputMap.forEach((k,v) => {
+            inputMap.forEach((v,k) => {
                 t.set(v[0],v[1]);
             });
         }
