@@ -7,7 +7,7 @@ var tsMap = (function () {
         t._values = [];
         t.length = 0;
         if (inputMap) {
-            inputMap.forEach(function (k, v) {
+            inputMap.forEach(function (v, k) {
                 t.set(v[0], v[1]);
             });
         }
