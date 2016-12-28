@@ -1,4 +1,4 @@
-export class tsMap<K,V> {
+export class TSMap<K,V> {
 
     public length:Number;
 
@@ -7,7 +7,7 @@ export class tsMap<K,V> {
      * 
      * @internal
      * @type {(Array<Array<K|V>>)}
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     private _items:Array<Array<K|V>>;
 
@@ -16,7 +16,7 @@ export class tsMap<K,V> {
      * 
      * @internal
      * @type {Array<K>}
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     private _keys:Array<K>;
 
@@ -25,7 +25,7 @@ export class tsMap<K,V> {
      * 
      * @internal
      * @type {Array<V>}
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     private _values:Array<V>;
 
@@ -49,7 +49,7 @@ export class tsMap<K,V> {
      * 
      * @param {*} jsonObject
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public fromJSON(jsonObject:any) {
         for (let property in jsonObject) {  
@@ -64,7 +64,7 @@ export class tsMap<K,V> {
      * 
      * @returns {*}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public toJSON():any {
         let obj = {};
@@ -80,7 +80,7 @@ export class tsMap<K,V> {
      * 
      * @returns {(Array<Array<K|V>>)}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public entries():Array<Array<K|V>> {
         return [].slice.call(this._items);
@@ -91,7 +91,7 @@ export class tsMap<K,V> {
      * 
      * @returns {Array<K>}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public keys():Array<K> {
         return [].slice.call(this._keys);
@@ -102,7 +102,7 @@ export class tsMap<K,V> {
      * 
      * @returns {Array<V>}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public values():Array<V> {
         return [].slice.call(this._values);
@@ -114,7 +114,7 @@ export class tsMap<K,V> {
      * @param {K} key
      * @returns {Boolean}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public has(key:K):Boolean {
         return this._keys.indexOf(key) > -1;
@@ -126,7 +126,7 @@ export class tsMap<K,V> {
      * @param {K} key
      * @returns {V}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public get(key:K):V {
         let i = this._keys.indexOf(key);
@@ -140,7 +140,7 @@ export class tsMap<K,V> {
      * @param {K} key
      * @param {V} value
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public set(key:K, value:V):void {
         let t = this;
@@ -162,7 +162,7 @@ export class tsMap<K,V> {
      * 
      * @returns {Number}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public size():Number {
         return this._items.length;
@@ -171,7 +171,7 @@ export class tsMap<K,V> {
     /**
      * Clear all the contents of the map
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public clear():void {
         let t = this;
@@ -185,7 +185,7 @@ export class tsMap<K,V> {
      * @param {K} key
      * @returns {Boolean}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public delete(key:K):Boolean {
         let t = this;
@@ -203,9 +203,9 @@ export class tsMap<K,V> {
     /**
      * Used to loop through the map.  
      * 
-     * @param {(value:V,key?:K,map?:tsMap<K,V>) => void} callbackfn
+     * @param {(value:V,key?:K,map?:TSMap<K,V>) => void} callbackfn
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public forEach(callbackfn:(value:V,key?:K) => void):void {
         let t = this;
@@ -220,7 +220,7 @@ export class tsMap<K,V> {
      * @param {(value:V,key?:K) => void} callbackfn
      * @returns {*}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
     public map(callbackfn:(value:V,key?:K) => any):Array<any> {
         let t = this;
@@ -233,11 +233,11 @@ export class tsMap<K,V> {
      * Removes items based on a conditional function passed to filter
      * 
      * @param {(value:V,key?:K) => Boolean} callbackfn
-     * @returns {tsMap<K,V>}
+     * @returns {TSMap<K,V>}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
-    public filter(callbackfn:(value:V,key?:K) => Boolean):tsMap<K,V> {
+    public filter(callbackfn:(value:V,key?:K) => Boolean):TSMap<K,V> {
         let t = this;
         t._keys.forEach((v) => {
             if(callbackfn(t.get(v),v) == false) t.delete(v); 
@@ -249,11 +249,11 @@ export class tsMap<K,V> {
      * Creates a deep copy of the map, breaking all references to the old map and it's children.
      * Uses JSON.parse so any functions will be stringified and lose their original purpose.
      * 
-     * @returns {tsMap<K,V>}
+     * @returns {TSMap<K,V>}
      * 
-     * @memberOf tsMap
+     * @memberOf TSMap
      */
-    public clone():tsMap<K,V> {
-        return new tsMap<K,V>(<any> JSON.parse(JSON.stringify(this._items)));
+    public clone():TSMap<K,V> {
+        return new TSMap<K,V>(<any> JSON.parse(JSON.stringify(this._items)));
     }
 }

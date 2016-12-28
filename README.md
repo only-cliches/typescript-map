@@ -9,11 +9,11 @@ Under 800 bytes gzipped. :)
 # Installation
 `npm install https://github.com/ClickSimply/typescript-map`
 
-The lib creates a single global variable: `tsMap`
+The lib creates a single global variable: `TSMap`
 
 If you're using typescript/ES6:
 ```
-import { tsMap } from "typescript-map"
+import { TSMap } from "typescript-map"
 ```
 
 If you're using node:
@@ -31,16 +31,16 @@ If you're just using it in the browser:
 
 
 ```
-var myMap = new tsMap();
+var myMap = new TSMap();
 myMap.set('foo','bar');
 console.log(myMap.get('foo')) //<= "bar"
 
 //Typescript
-var myMap = new tsMap<String,Number>();
+var myMap = new TSMap<String,Number>();
 myMap.set('foo',2);
 
 //ES6 Maps take an array of arrays as the optional init object:
-var myMap = new tsMap([
+var myMap = new TSMap([
     ['foo','bar'],
     ['key','value']
 ])
@@ -49,7 +49,7 @@ var myMap = new tsMap([
 //Also includes several functions that aren't in the spec:
 
 //Import JSON into the map
-var myMap = new tsMap().fromJSON({
+var myMap = new TSMap().fromJSON({
     foo:'bar',
     key:'value'
 });

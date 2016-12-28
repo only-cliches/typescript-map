@@ -1,6 +1,6 @@
 "use strict";
-var tsMap = (function () {
-    function tsMap(inputMap) {
+var TSMap = (function () {
+    function TSMap(inputMap) {
         var t = this;
         t._items = [];
         t._keys = [];
@@ -12,14 +12,14 @@ var tsMap = (function () {
             });
         }
     }
-    tsMap.prototype.fromJSON = function (jsonObject) {
+    TSMap.prototype.fromJSON = function (jsonObject) {
         for (var property in jsonObject) {
             if (jsonObject.hasOwnProperty(property)) {
                 this.set(property, jsonObject[property]);
             }
         }
     };
-    tsMap.prototype.toJSON = function () {
+    TSMap.prototype.toJSON = function () {
         var obj = {};
         var t = this;
         t.keys().forEach(function (k) {
@@ -27,23 +27,23 @@ var tsMap = (function () {
         });
         return obj;
     };
-    tsMap.prototype.entries = function () {
+    TSMap.prototype.entries = function () {
         return [].slice.call(this._items);
     };
-    tsMap.prototype.keys = function () {
+    TSMap.prototype.keys = function () {
         return [].slice.call(this._keys);
     };
-    tsMap.prototype.values = function () {
+    TSMap.prototype.values = function () {
         return [].slice.call(this._values);
     };
-    tsMap.prototype.has = function (key) {
+    TSMap.prototype.has = function (key) {
         return this._keys.indexOf(key) > -1;
     };
-    tsMap.prototype.get = function (key) {
+    TSMap.prototype.get = function (key) {
         var i = this._keys.indexOf(key);
         return i > -1 ? this._values[i] : undefined;
     };
-    tsMap.prototype.set = function (key, value) {
+    TSMap.prototype.set = function (key, value) {
         var t = this;
         var i = this._keys.indexOf(key);
         if (i > -1) {
@@ -57,15 +57,15 @@ var tsMap = (function () {
         }
         t.length = t.size();
     };
-    tsMap.prototype.size = function () {
+    TSMap.prototype.size = function () {
         return this._items.length;
     };
-    tsMap.prototype.clear = function () {
+    TSMap.prototype.clear = function () {
         var t = this;
         t._keys.length = t._values.length = t._items.length = 0;
         t.length = t.size();
     };
-    tsMap.prototype.delete = function (key) {
+    TSMap.prototype.delete = function (key) {
         var t = this;
         var i = t._keys.indexOf(key);
         if (i > -1) {
@@ -77,19 +77,19 @@ var tsMap = (function () {
         }
         return false;
     };
-    tsMap.prototype.forEach = function (callbackfn) {
+    TSMap.prototype.forEach = function (callbackfn) {
         var t = this;
         t._keys.forEach(function (v) {
             callbackfn(t.get(v), v);
         });
     };
-    tsMap.prototype.map = function (callbackfn) {
+    TSMap.prototype.map = function (callbackfn) {
         var t = this;
         return this._keys.map(function (itemKey) {
             return callbackfn(t.get(itemKey), itemKey);
         });
     };
-    tsMap.prototype.filter = function (callbackfn) {
+    TSMap.prototype.filter = function (callbackfn) {
         var t = this;
         t._keys.forEach(function (v) {
             if (callbackfn(t.get(v), v) == false)
@@ -97,9 +97,9 @@ var tsMap = (function () {
         });
         return this;
     };
-    tsMap.prototype.clone = function () {
-        return new tsMap(JSON.parse(JSON.stringify(this._items)));
+    TSMap.prototype.clone = function () {
+        return new TSMap(JSON.parse(JSON.stringify(this._items)));
     };
-    return tsMap;
+    return TSMap;
 }());
-exports.tsMap = tsMap;
+exports.TSMap = TSMap;
