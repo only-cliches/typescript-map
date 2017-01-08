@@ -1,7 +1,7 @@
 {
   "name": "typescript-map",
-  "version": "0.0.2",
-  "description": "ES6 Map Like Implemented in typescript",
+  "version": "0.0.3",
+  "description": "ES6 Map Implemented in TypeScript",
   "main": "index.js",
   "scripts": {
     "build": "bash build.sh"
@@ -13,7 +13,28 @@
   "typescript": {
     "definition": "index.d.ts"
   },
-  "keywords": [],
+  "keywords": [
+    "collection",
+    "es6",
+    "shim",
+    "harmony",
+    "list",
+    "hash",
+    "map",
+    "polyfill",
+    "ponyfill",
+    "ecmascript",
+    "typescript",
+    "generics",
+    "data",
+    "structures",
+    "collections",
+    "dictionary",
+    "tree",
+    "stack",
+    "queue",
+    "set"
+  ],
   "author": "Scott Lott, ClickSimply.com",
   "license": "MIT",
   "bugs": {

@@ -1,6 +1,6 @@
 export class TSMap<K,V> {
 
-    public length:Number;
+    public length:number;
 
     /**
      * Used to hold any array of the map items.
@@ -51,22 +51,24 @@ export class TSMap<K,V> {
      * 
      * @memberOf TSMap
      */
-    public fromJSON(jsonObject:any) {
+    public fromJSON(jsonObject:any): TSMap<K,V> {
         for (let property in jsonObject) {  
             if (jsonObject.hasOwnProperty(property)) {
                 this.set(<any> property, jsonObject[property]);
             }
         }        
+        return this;
     }
+
 
     /**
      * Outputs the contents of the map to a JSON object
      * 
-     * @returns {*}
+     * @returns {Object}
      * 
      * @memberOf TSMap
      */
-    public toJSON():any {
+    public toJSON():Object {
         let obj = {};
         let t = this;
         t.keys().forEach((k) => {
@@ -142,7 +144,7 @@ export class TSMap<K,V> {
      * 
      * @memberOf TSMap
      */
-    public set(key:K, value:V):void {
+    public set(key:K, value:V): TSMap<K,V> {
         let t = this;
         // check if key exists and overwrite
         let i = this._keys.indexOf(key);
@@ -155,28 +157,32 @@ export class TSMap<K,V> {
             t._values.push(value);
         }
         t.length = t.size();
+        return this;
     }
 
     /**
      * Provide a number representing the number of items in the map
      * 
-     * @returns {Number}
+     * @returns {number}
      * 
      * @memberOf TSMap
      */
-    public size():Number {
+    public size():number {
         return this._items.length;
     }
+
 
     /**
      * Clear all the contents of the map
      * 
+     * @returns {TSMap<K,V>}
+     * 
      * @memberOf TSMap
      */
-    public clear():void {
+    public clear(): TSMap<K,V> {
         let t = this;
-        t._keys.length = t._values.length = t._items.length = 0;
-        t.length = t.size();
+        t._keys.length = t.length = t._values.length = t._items.length = 0;
+        return this;
     }
 
     /**
@@ -203,44 +209,51 @@ export class TSMap<K,V> {
     /**
      * Used to loop through the map.  
      * 
-     * @param {(value:V,key?:K,map?:TSMap<K,V>) => void} callbackfn
+     * @param {(value:V,key?:K,index?:number) => void} callbackfn
      * 
      * @memberOf TSMap
      */
-    public forEach(callbackfn:(value:V,key?:K) => void):void {
+    public forEach(callbackfn:(value:V,key?:K,index?:number) => void):void {
         let t = this;
+        let i = 0;
         t._keys.forEach((v) => {
-            callbackfn(t.get(v),v);
+            callbackfn(t.get(v),v,i);
+            i++;
         });
     }
 
     /**
      * Returns an array containing the returned value of each item in the map.
      * 
-     * @param {(value:V,key?:K) => void} callbackfn
-     * @returns {*}
+     * @param {(value:V,key?:K,index?:number) => any} callbackfn
+     * @returns {Array<any>}
      * 
      * @memberOf TSMap
      */
-    public map(callbackfn:(value:V,key?:K) => any):Array<any> {
+    public map(callbackfn:(value:V,key?:K,index?:number) => any):Array<any> {
         let t = this;
-        return this._keys.map((itemKey) =>{
-            return callbackfn(t.get(itemKey),itemKey);
+        let i = -1;
+        return this.keys().map((itemKey) =>{
+            i++;
+            return callbackfn(t.get(itemKey),itemKey,i);
         });
     }
+
 
     /**
      * Removes items based on a conditional function passed to filter
      * 
-     * @param {(value:V,key?:K) => Boolean} callbackfn
+     * @param {(value:V,key?:K,index?:number) => Boolean} callbackfn
      * @returns {TSMap<K,V>}
      * 
      * @memberOf TSMap
      */
-    public filter(callbackfn:(value:V,key?:K) => Boolean):TSMap<K,V> {
+    public filter(callbackfn:(value:V,key?:K,index?:number) => Boolean):TSMap<K,V> {
         let t = this;
+        let i = 0;
         t._keys.forEach((v) => {
-            if(callbackfn(t.get(v),v) == false) t.delete(v); 
+            if(callbackfn(t.get(v),v,i) === false) t.delete(v); 
+            i++;
         });
         return this;
     }

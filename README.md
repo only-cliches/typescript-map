@@ -1,5 +1,5 @@
 # typescript-map
-ES6 Map implemented in Typescript.
+ES6 Map implemented in TypeScript.
 
 This is not an ES6 Map polyfill, it is not a pure implementation (but it's really close!).
 I just needed a way to declare maps in my ts code in a safe, reusable way without taking dozens of kilobytes.
@@ -7,7 +7,7 @@ I just needed a way to declare maps in my ts code in a safe, reusable way withou
 Under 800 bytes gzipped. :)
 
 # Installation
-`npm install https://github.com/ClickSimply/typescript-map`
+`npm install typescript-map`
 
 The lib creates a single global variable: `TSMap`
 
@@ -18,14 +18,14 @@ import { TSMap } from "typescript-map"
 
 If you're using node:
 ```
-var map = require("typescript-map");
+var map = require("typescript-map").TSMap;
 ```
 
 If you're just using it in the browser:
 
 1. Download `dist/tsmap.min.js`
 
-2. Include it in your head: `<script src="tsmap.min.js"></script>`.  You may want to rename the file before dropping into your project.
+2. Include it in your head: `<script src="tsmap.min.js"></script>`.
 
 # Usage
 
