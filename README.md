@@ -12,12 +12,12 @@ Just over 900 bytes gzipped. :)
 The lib creates a single global variable: `TSMap`
 
 If you're using typescript/ES6:
-```
+```ts
 import { TSMap } from "typescript-map"
 ```
 
 If you're using commonjs:
-```
+```ts
 var map = require("typescript-map").TSMap;
 ```
 
@@ -30,7 +30,7 @@ If you're just using it in the browser:
 # Usage
 
 
-```
+```ts
 var myMap = new TSMap();
 myMap.set('foo','bar');
 console.log(myMap.get('foo')) //<= "bar"
