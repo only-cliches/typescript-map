@@ -1,22 +1,24 @@
 export declare class TSMap<K, V> {
     length: number;
-    constructor(inputMap?: Array<Array<K | V>>);
+    constructor(inputMap?: (K | V)[][]);
     /**
-     * Converts a JSON object to an map.
+     * Convert a JSON object to a map.
      *
-     * @param {*} jsonObject
-     *
-     * @memberOf TSMap
+     * @param {*} jsonObject JSON object to convert
+     * @param {boolean} [convertObjs] convert nested objects to maps
+     * @returns {TSMap<K, V>}
+     * @memberof TSMap
      */
-    fromJSON(jsonObject: any): TSMap<K, V>;
+    fromJSON(jsonObject: any, convertObjs?: boolean): this;
     /**
      * Outputs the contents of the map to a JSON object
      *
-     * @returns {Object}
-     *
-     * @memberOf TSMap
+     * @returns {{[key: string]: V}}
+     * @memberof TSMap
      */
-    toJSON(): Object;
+    toJSON(): {
+        [key: string]: V;
+    };
     /**
      * Get an array of arrays respresenting the map, kind of like an export function.
      *
@@ -24,7 +26,7 @@ export declare class TSMap<K, V> {
      *
      * @memberOf TSMap
      */
-    entries(): Array<Array<K | V>>;
+    entries(): (K | V)[][];
     /**
      * Get an array of keys in the map.
      *
@@ -32,7 +34,7 @@ export declare class TSMap<K, V> {
      *
      * @memberOf TSMap
      */
-    keys(): Array<K>;
+    keys(): K[];
     /**
      * Get an array of the values in the map.
      *
@@ -40,7 +42,7 @@ export declare class TSMap<K, V> {
      *
      * @memberOf TSMap
      */
-    values(): Array<V>;
+    values(): V[];
     /**
      * Check to see if an item in the map exists given it's key.
      *
@@ -49,7 +51,7 @@ export declare class TSMap<K, V> {
      *
      * @memberOf TSMap
      */
-    has(key: K): Boolean;
+    has(key: K): boolean;
     /**
      * Get a specific item from the map given it's key.
      *
@@ -60,6 +62,15 @@ export declare class TSMap<K, V> {
      */
     get(key: K): V;
     /**
+     * Safely retrieve a deeply nested property.
+     *
+     * @param {K[]} path
+     * @returns {V}
+     *
+     * @memberOf TSMap
+     */
+    deepGet(path: K[]): V;
+    /**
      * Set a specific item in the map given it's key, automatically adds new items as needed.
      * Ovewrrites existing items
      *
@@ -68,7 +79,7 @@ export declare class TSMap<K, V> {
      *
      * @memberOf TSMap
      */
-    set(key: K, value: V): TSMap<K, V>;
+    set(key: K, value: V): this;
     /**
      * Provide a number representing the number of items in the map
      *
@@ -84,7 +95,7 @@ export declare class TSMap<K, V> {
      *
      * @memberOf TSMap
      */
-    clear(): TSMap<K, V>;
+    clear(): this;
     /**
      * Delete an item from the map given it's key
      *
@@ -93,7 +104,7 @@ export declare class TSMap<K, V> {
      *
      * @memberOf TSMap
      */
-    delete(key: K): Boolean;
+    delete(key: K): boolean;
     /**
      * Used to loop through the map.
      *
@@ -105,21 +116,21 @@ export declare class TSMap<K, V> {
     /**
      * Returns an array containing the returned value of each item in the map.
      *
-     * @param {(value:V,key?:K) => void} callbackfn
-     * @returns {*}
+     * @param {(value:V,key?:K,index?:number) => any} callbackfn
+     * @returns {Array<any>}
      *
      * @memberOf TSMap
      */
-    map(callbackfn: (value: V, key?: K, index?: number) => any): Array<any>;
+    map(callbackfn: (value: V, key?: K, index?: number) => any): any[];
     /**
      * Removes items based on a conditional function passed to filter
      *
-     * @param {(value:V,key?:K) => Boolean} callbackfn
+     * @param {(value:V,key?:K,index?:number) => Boolean} callbackfn
      * @returns {TSMap<K,V>}
      *
      * @memberOf TSMap
      */
-    filter(callbackfn: (value: V, key?: K) => Boolean): TSMap<K, V>;
+    filter(callbackfn: (value: V, key?: K, index?: number) => Boolean): this;
     /**
      * Creates a deep copy of the map, breaking all references to the old map and it's children.
      * Uses JSON.parse so any functions will be stringified and lose their original purpose.

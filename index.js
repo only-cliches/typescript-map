@@ -1,8 +1,8 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var TSMap = (function () {
     function TSMap(inputMap) {
         var t = this;
-        t._items = [];
         t._keys = [];
         t._values = [];
         t.length = 0;
@@ -13,32 +13,51 @@ var TSMap = (function () {
         }
     }
     /**
-     * Converts a JSON object to an map.
+     * Convert a JSON object to a map.
      *
-     * @param {*} jsonObject
-     *
-     * @memberOf TSMap
+     * @param {*} jsonObject JSON object to convert
+     * @param {boolean} [convertObjs] convert nested objects to maps
+     * @returns {TSMap<K, V>}
+     * @memberof TSMap
      */
-    TSMap.prototype.fromJSON = function (jsonObject) {
-        for (var property in jsonObject) {
+    TSMap.prototype.fromJSON = function (jsonObject, convertObjs) {
+        var t = this;
+        var setProperty = function (value) {
+            if (value !== null && typeof value === 'object' && convertObjs)
+                return new TSMap().fromJSON(value, true);
+            if (Array.isArray(value) && convertObjs)
+                return value.map(function (v) { return setProperty(v); });
+            return value;
+        };
+        Object.keys(jsonObject).forEach(function (property) {
             if (jsonObject.hasOwnProperty(property)) {
-                this.set(property, jsonObject[property]);
+                t.set(property, setProperty(jsonObject[property]));
             }
-        }
-        return this;
+        });
+        return t;
     };
     /**
      * Outputs the contents of the map to a JSON object
      *
-     * @returns {Object}
-     *
-     * @memberOf TSMap
+     * @returns {{[key: string]: V}}
+     * @memberof TSMap
      */
     TSMap.prototype.toJSON = function () {
         var obj = {};
         var t = this;
+        var getValue = function (value) {
+            if (value instanceof TSMap) {
+                return value.toJSON();
+            }
+            else if (Array.isArray(value)) {
+                return value.map(function (v) { return getValue(v); });
+            }
+            else {
+                return value;
+            }
+        };
         t.keys().forEach(function (k) {
-            obj[String(k)] = t.get(k);
+            obj[String(k)] = getValue(t.get(k));
         });
         return obj;
     };
@@ -50,7 +69,8 @@ var TSMap = (function () {
      * @memberOf TSMap
      */
     TSMap.prototype.entries = function () {
-        return [].slice.call(this._items);
+        var _this = this;
+        return [].slice.call(this.keys().map(function (k) { return [k, _this.get(k)]; }));
     };
     /**
      * Get an array of keys in the map.
@@ -96,6 +116,26 @@ var TSMap = (function () {
         return i > -1 ? this._values[i] : undefined;
     };
     /**
+     * Safely retrieve a deeply nested property.
+     *
+     * @param {K[]} path
+     * @returns {V}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.deepGet = function (path) {
+        if (!path || !path.length)
+            return null;
+        var recursiveGet = function (obj, path) {
+            if (obj === undefined || obj === null)
+                return null;
+            if (!path.length)
+                return obj;
+            return recursiveGet(obj instanceof TSMap ? obj.get(path[0]) : obj[path[0]], path.slice(1));
+        };
+        return recursiveGet(this.get(path[0]), path.slice(1));
+    };
+    /**
      * Set a specific item in the map given it's key, automatically adds new items as needed.
      * Ovewrrites existing items
      *
@@ -109,15 +149,13 @@ var TSMap = (function () {
         // check if key exists and overwrite
         var i = this._keys.indexOf(key);
         if (i > -1) {
-            t._items[i][1] = value;
             t._values[i] = value;
         }
         else {
-            t._items.push([key, value]);
             t._keys.push(key);
             t._values.push(value);
+            t.length = t._values.length;
         }
-        t.length = t.size();
         return this;
     };
     /**
@@ -128,7 +166,7 @@ var TSMap = (function () {
      * @memberOf TSMap
      */
     TSMap.prototype.size = function () {
-        return this._items.length;
+        return this.length;
     };
     /**
      * Clear all the contents of the map
@@ -139,8 +177,7 @@ var TSMap = (function () {
      */
     TSMap.prototype.clear = function () {
         var t = this;
-        t._keys.length = t._values.length = t._items.length = 0;
-        t.length = t.size();
+        t._keys.length = t.length = t._values.length = 0;
         return this;
     };
     /**
@@ -157,8 +194,7 @@ var TSMap = (function () {
         if (i > -1) {
             t._keys.splice(i, 1);
             t._values.splice(i, 1);
-            t._items.splice(i, 1);
-            t.length = t.size();
+            t.length = t._keys.length;
             return true;
         }
         return false;
@@ -171,39 +207,37 @@ var TSMap = (function () {
      * @memberOf TSMap
      */
     TSMap.prototype.forEach = function (callbackfn) {
-        var t = this;
-        var i = 0;
-        t._keys.forEach(function (v) {
-            callbackfn(t.get(v), v, i);
-            i++;
+        var _this = this;
+        this._keys.forEach(function (v, i) {
+            callbackfn(_this.get(v), v, i);
         });
     };
     /**
      * Returns an array containing the returned value of each item in the map.
      *
-     * @param {(value:V,key?:K) => void} callbackfn
-     * @returns {*}
+     * @param {(value:V,key?:K,index?:number) => any} callbackfn
+     * @returns {Array<any>}
      *
      * @memberOf TSMap
      */
     TSMap.prototype.map = function (callbackfn) {
-        var t = this;
-        return this._keys.map(function (itemKey) {
-            return callbackfn(t.get(itemKey), itemKey);
+        var _this = this;
+        return this.keys().map(function (itemKey, i) {
+            return callbackfn(_this.get(itemKey), itemKey, i);
         });
     };
     /**
      * Removes items based on a conditional function passed to filter
      *
-     * @param {(value:V,key?:K) => Boolean} callbackfn
+     * @param {(value:V,key?:K,index?:number) => Boolean} callbackfn
      * @returns {TSMap<K,V>}
      *
      * @memberOf TSMap
      */
     TSMap.prototype.filter = function (callbackfn) {
         var t = this;
-        t._keys.forEach(function (v) {
-            if (callbackfn(t.get(v), v) == false)
+        t._keys.forEach(function (v, i) {
+            if (callbackfn(t.get(v), v, i) === false)
                 t.delete(v);
         });
         return this;
@@ -217,7 +251,7 @@ var TSMap = (function () {
      * @memberOf TSMap
      */
     TSMap.prototype.clone = function () {
-        return new TSMap(JSON.parse(JSON.stringify(this._items)));
+        return new TSMap(this.entries());
     };
     return TSMap;
 }());
