@@ -159,6 +159,48 @@ var TSMap = (function () {
         return this;
     };
     /**
+     * Enters a value into the map forcing the keys to always be sorted.
+     *
+     * @param {K} key
+     * @param {V} value
+     * @param {number} [startVal]
+     * @param {number} [endVal]
+     * @returns {this}
+     * @memberof TSMap
+     */
+    TSMap.prototype.sortedSet = function (key, value, startVal, endVal) {
+        var t = this;
+        var length = this._keys.length;
+        var start = startVal || 0;
+        var end = endVal !== undefined ? endVal : length - 1;
+        if (length == 0) {
+            t._keys.push(key);
+            t._values.push(value);
+            return t;
+        }
+        if (key > this._keys[end]) {
+            this._keys.splice(end + 1, 0, key);
+            this._values.splice(end + 1, 0, value);
+            return this;
+        }
+        if (key < this._keys[start]) {
+            this._values.splice(start, 0, value);
+            this._keys.splice(start, 0, key);
+            return this;
+        }
+        if (start >= end) {
+            return this;
+        }
+        var m = start + Math.floor((end - start) / 2);
+        if (key < this._keys[m]) {
+            return this.sortedSet(key, value, start, m - 1);
+        }
+        if (key > this._keys[m]) {
+            return this.sortedSet(key, value, m + 1, end);
+        }
+        return this;
+    };
+    /**
      * Provide a number representing the number of items in the map
      *
      * @returns {number}
@@ -227,7 +269,8 @@ var TSMap = (function () {
         });
     };
     /**
-     * Removes items based on a conditional function passed to filter
+     * Removes items based on a conditional function passed to filter.
+     * Mutates the map in place.
      *
      * @param {(value:V,key?:K,index?:number) => Boolean} callbackfn
      * @returns {TSMap<K,V>}

@@ -81,6 +81,17 @@ export declare class TSMap<K, V> {
      */
     set(key: K, value: V): this;
     /**
+     * Enters a value into the map forcing the keys to always be sorted.
+     *
+     * @param {K} key
+     * @param {V} value
+     * @param {number} [startVal]
+     * @param {number} [endVal]
+     * @returns {this}
+     * @memberof TSMap
+     */
+    sortedSet(key: K, value: V, startVal?: number, endVal?: number): this;
+    /**
      * Provide a number representing the number of items in the map
      *
      * @returns {number}
@@ -123,7 +134,8 @@ export declare class TSMap<K, V> {
      */
     map(callbackfn: (value: V, key?: K, index?: number) => any): any[];
     /**
-     * Removes items based on a conditional function passed to filter
+     * Removes items based on a conditional function passed to filter.
+     * Mutates the map in place.
      *
      * @param {(value:V,key?:K,index?:number) => Boolean} callbackfn
      * @returns {TSMap<K,V>}

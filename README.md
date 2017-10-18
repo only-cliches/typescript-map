@@ -4,7 +4,7 @@ ES6 Map implemented in TypeScript.
 This is not an ES6 Map polyfill, it is not a pure implementation (but it's really close!).
 I just needed a way to declare maps in my ts code in a safe, reusable way without taking dozens of kilobytes.
 
-Just over 900 bytes gzipped. :)
+Just over 1 kilobyte gzipped. :)
 
 # Installation
 `npm install typescript-map`
@@ -18,7 +18,7 @@ import { TSMap } from "typescript-map"
 
 If you're using commonjs:
 ```ts
-var map = require("typescript-map").TSMap;
+const TSMap = require("typescript-map").TSMap;
 ```
 
 If you're just using it in the browser:
@@ -45,16 +45,25 @@ var myMap = new TSMap([
     ['key','value']
 ])
 
-//Also includes several functions that aren't in the spec:
+```
 
+Also includes several functions that aren't in the spec
+
+```ts
 // Safely retrieve a deeply nested object, works for nested TSMaps, objects and arrays.
 let someValue = myMap.deepGet(["deeply","nested","property"]);
+
+// Insert items keeping the keys sorted (Uses a super fast binary insert method)
+myMap.sortedSet(5, "apple");
+myMap.sortedSet(2, "orange");
+myMap.sortedSet(7, "bannana");
+console.log(myMap.keys()) // <= [2, 5, 7];
 
 //Import JSON into the map
 var myMap = new TSMap().fromJSON({
     foo:'bar',
     key:'value'
-}, true); // <= optional second parameter, if "true" nested objects will be converted to TSMaps.
+}, true); // <= optional second parameter, if "true" nested objects should be converted to TSMaps.
 
 //Export the map to JSON
 var myJSON = myMap.toJSON();

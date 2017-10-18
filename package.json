@@ -1,6 +1,6 @@
 {
     "name": "typescript-map",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "ES6 Map Implemented in TypeScript",
     "main": "index.js",
     "scripts": {

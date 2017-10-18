@@ -1,3 +1,6 @@
+# 0.0.5
+- Added `sortedSet` method that forces the keys to remain sorted as you insert items.
+
 # 0.0.4
 - Cleaned up code a bit.
 - Added `deepGet` property.
