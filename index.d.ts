@@ -82,6 +82,8 @@ export declare class TSMap<K, V> {
     set(key: K, value: V): this;
     /**
      * Enters a value into the map forcing the keys to always be sorted.
+     * Stolen from https://machinesaredigging.com/2014/04/27/binary-insert-how-to-keep-an-array-sorted-as-you-insert-data-in-it/
+     * Best case speed is O(1), worse case is O(N).
      *
      * @param {K} key
      * @param {V} value

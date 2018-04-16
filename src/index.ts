@@ -46,7 +46,7 @@ export class TSMap<K, V> {
         let t = this;
 
         const setProperty = (value: any): any => {
-            if (value !== null && typeof value === 'object' && convertObjs) return new TSMap<any,any>().fromJSON(value, true);
+            if (value !== null && typeof value === 'object' && convertObjs) return new TSMap<any, any>().fromJSON(value, true);
             if (Array.isArray(value) && convertObjs) return value.map(v => setProperty(v));
             return value;
         }
@@ -65,7 +65,7 @@ export class TSMap<K, V> {
      * @returns {{[key: string]: V}} 
      * @memberof TSMap
      */
-    public toJSON(): {[key: string]: V} {
+    public toJSON(): { [key: string]: V } {
         let obj = {};
         let t = this;
 
@@ -92,7 +92,7 @@ export class TSMap<K, V> {
      * 
      * @memberOf TSMap
      */
-    public entries(): (K|V)[][] {
+    public entries(): (K | V)[][] {
         return [].slice.call(this.keys().map(k => [k, this.get(k)]));
     }
 
@@ -204,35 +204,44 @@ export class TSMap<K, V> {
         const length = this._keys.length;
         const start = startVal || 0;
         const end = endVal !== undefined ? endVal : length - 1;
-        
+
         if (length == 0) {
             t._keys.push(key);
             t._values.push(value);
             return t;
         }
-    
+
+        if (key == this._keys[start]) {
+            this._values.splice(start, 0, value);
+            return this;
+        }
+        if (key == this._keys[end]) {
+            this._values.splice(end, 0, value);
+            return this;
+        }
+
         if (key > this._keys[end]) {
             this._keys.splice(end + 1, 0, key);
             this._values.splice(end + 1, 0, value);
             return this;
         }
-    
+
         if (key < this._keys[start]) {
             this._values.splice(start, 0, value);
             this._keys.splice(start, 0, key);
             return this;
         }
-    
+
         if (start >= end) {
             return this;
         }
 
         const m = start + Math.floor((end - start) / 2);
-    
+
         if (key < this._keys[m]) {
             return this.sortedSet(key, value, start, m - 1);
         }
-    
+
         if (key > this._keys[m]) {
             return this.sortedSet(key, value, m + 1, end);
         }

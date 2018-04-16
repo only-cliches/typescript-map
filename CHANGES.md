@@ -1,3 +1,7 @@
+# 0.0.6
+- Fixed `sortedSet` bug.
+- Updated dependencies
+
 # 0.0.5
 - Added `sortedSet` method that forces the keys to remain sorted as you insert items.
 

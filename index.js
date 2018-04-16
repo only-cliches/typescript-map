@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var TSMap = (function () {
+var TSMap = /** @class */ (function () {
     function TSMap(inputMap) {
         var t = this;
         t._keys = [];
@@ -160,6 +160,8 @@ var TSMap = (function () {
     };
     /**
      * Enters a value into the map forcing the keys to always be sorted.
+     * Stolen from https://machinesaredigging.com/2014/04/27/binary-insert-how-to-keep-an-array-sorted-as-you-insert-data-in-it/
+     * Best case speed is O(1), worse case is O(N).
      *
      * @param {K} key
      * @param {V} value
@@ -177,6 +179,14 @@ var TSMap = (function () {
             t._keys.push(key);
             t._values.push(value);
             return t;
+        }
+        if (key == this._keys[start]) {
+            this._values.splice(start, 0, value);
+            return this;
+        }
+        if (key == this._keys[end]) {
+            this._values.splice(end, 0, value);
+            return this;
         }
         if (key > this._keys[end]) {
             this._keys.splice(end + 1, 0, key);
