@@ -1,6 +1,6 @@
 {
     "name": "typescript-map",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "ES6 Map Implemented in TypeScript",
     "main": "index.js",
     "scripts": {
@@ -42,8 +42,8 @@
     },
     "homepage": "https://github.com/ClickSimply/typescript-map#readme",
     "devDependencies": {
-        "typescript": "^2.3.4",
+        "typescript": "^2.9.2",
         "uglifyjs": "^2.4.11",
-        "webpack": "^3.0.0"
+        "webpack": "^3.12.0"
     }
 }

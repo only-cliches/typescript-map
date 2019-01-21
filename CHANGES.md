@@ -1,3 +1,8 @@
+# 0.0.7
+- Merged PR.
+- Updated dependencies.
+- Fixed issue [3](https://github.com/ClickSimply/typescript-map/issues/3).
+
 # 0.0.6
 - Fixed `sortedSet` bug.
 - Updated dependencies
