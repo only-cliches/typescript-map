@@ -332,7 +332,7 @@ export class TSMap<K, V> {
      */
     public filter(callbackfn: (value: V, key?: K, index?: number) => Boolean): this {
         let t = this;
-        t._keys.forEach((v, i) => {
+        [...t._keys].forEach((v, i) => {
             if (callbackfn(t.get(v), v, i) === false) t.delete(v);
         });
         return this;
