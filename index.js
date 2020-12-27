@@ -1,5 +1,13 @@
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TSMap = void 0;
 var TSMap = /** @class */ (function () {
     function TSMap(inputMap) {
         var t = this;
@@ -181,11 +189,11 @@ var TSMap = /** @class */ (function () {
             return t;
         }
         if (key == this._keys[start]) {
-            this._values.splice(start, 0, value);
+            this._values[start] = value;
             return this;
         }
         if (key == this._keys[end]) {
-            this._values.splice(end, 0, value);
+            this._values[end] = value;
             return this;
         }
         if (key > this._keys[end]) {
@@ -289,7 +297,7 @@ var TSMap = /** @class */ (function () {
      */
     TSMap.prototype.filter = function (callbackfn) {
         var t = this;
-        t._keys.slice().forEach(function (v, i) {
+        __spreadArrays(t._keys).forEach(function (v, i) {
             if (callbackfn(t.get(v), v, i) === false)
                 t.delete(v);
         });

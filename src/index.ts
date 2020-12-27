@@ -212,11 +212,11 @@ export class TSMap<K, V> {
         }
 
         if (key == this._keys[start]) {
-            this._values.splice(start, 0, value);
+            this._values[start] = value;
             return this;
         }
         if (key == this._keys[end]) {
-            this._values.splice(end, 0, value);
+            this._values[end] = value;
             return this;
         }
 

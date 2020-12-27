@@ -6,6 +6,8 @@ I just needed a way to declare maps in my ts code in a safe, reusable way withou
 
 Just over 1 kilobyte gzipped. :)
 
+*Note*: This library doesn't use a hashing function to keep the implmentation small and simple, this means if you plan to put more than a few hundred keys into the map or if the map is on a hot path you should use [es6-map](https://www.npmjs.com/package/es6-map) instead.
+
 # Installation
 `npm install typescript-map`
 
